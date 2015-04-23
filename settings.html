@@ -1,0 +1,41 @@
+<html>
+<head>
+<script type="text/javascript">
+	var getData = function () {
+		var jsonData = {};
+		if (window.location.hash) {
+			try {
+				jsonData = JSON.parse(decodeURIComponent(window.location.hash.substring(1)));
+			} catch (e) {}
+		}
+		return jsonData;
+	}
+</script>
+</head>
+<body>
+	<h1>Settings for Diet reminder</h1>
+	<form id="calorie-form">
+		<label for="calorie">Total calories</label>
+		<input type="text" id="calories" name="calories" value="" />
+		<br />
+		<input type="submit" value="Save" />
+	</form>
+	<script type="text/javascript">
+	var caloriesInput = document.getElementById('calories'),
+		data = getData();
+	if (data.calories) {
+		caloriesInput.value = data.calories;
+	}
+	
+	document.getElementById('calorie-form').addEventListener('submit', function (e) {
+		e.stopPropagation();
+		e.preventDefault();
+		var preparedData = {
+			calories: caloriesInput.value
+		}
+		var url = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(preparedData));
+		window.location = url;
+	});
+	</script>
+</body>
+</html>
