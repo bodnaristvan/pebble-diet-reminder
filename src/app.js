@@ -35,7 +35,7 @@ var reminders = {
 
 /** settings **/
 Settings.config(
-	{ url: 'http://serif.ddns.net:9000/pebble/diet-reminder.html' },
+	{ url: 'https://bodnaristvan.github.io/pebble-diet-reminder/settings.html' },
 	function(e) {
 		Settings.option('calories', dailyIntake);
 	},
