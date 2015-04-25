@@ -45,7 +45,8 @@ Settings.config(
 /** UI elements **/
 var mainCard = new UI.Card({
 	title: 'Diet reminder',
-	icon: 'images/apple-icon-small.png'
+	// icon: 'images/apple-icon-small.png',
+	scrollable: false
 });
 
 var reminderCard = new UI.Card({
@@ -57,7 +58,7 @@ var reminderCard = new UI.Card({
 var showReminder = function (reminderId) {
 	'use strict';
 	reminderCard.subtitle(reminders[reminderId].label);
-	reminderCard.body('Suggested calorie intake: ' + Math.floor(dailyIntake * reminders[reminderId].calories));
+	reminderCard.body('Suggested calorie intake: ' + Math.floor(dailyIntake * reminders[reminderId].calories) + 'kcal');
 	reminderCard.show();
 	Vibe.vibrate('long');
 	Light.trigger();
@@ -90,9 +91,15 @@ Wakeup.launch(function(e) {
 	} else {
 		var nextTime = scheduleNextTime(),
 			d = new Date(nextTime * 1000),
+			m = d.getMinutes(),
 			hours = d.getHours(),
-			minutes = (d.getMinutes() < 10) ? '0' + d.getMinutes() : '' + d.getMinutes(),
-			reminderText = 'Daily reminders of suggested calorie intake.\nNext one at ' + hours + ':' + minutes + '\nTotal calories: ' + dailyIntake;
+			minutes = (m < 10) ? '0' + m : '' + m,
+			reminder = reminders[(hours * 100) + m],
+			calories = Math.floor(dailyIntake * reminder.calories),
+			reminderText;
+		reminderText  = 'Next meal is ' + reminder.label.toLowerCase() + ' at ' + hours + ':' + minutes + ', ';
+		reminderText += 'suggested calorie intake is ' + calories + 'kcal.\n\n';
+		reminderText += 'Daily calories: ' + dailyIntake + 'kcal';
 		mainCard.body(reminderText);
 		mainCard.show();
 	}
